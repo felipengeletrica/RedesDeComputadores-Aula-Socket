@@ -1,61 +1,30 @@
-# import socket programming library
-import socket
-
-# import thread module
-from _thread import *
-import threading
-
-print_lock = threading.Lock()
+import socketserver
 
 
-# thread function
-def threaded(c):
-    while True:
+class MyTCPHandler(socketserver.BaseRequestHandler):
+    """
+    The RequestHandler class for our server.
 
-        # data received from client
-        data = c.recv(1024)
-        if not data:
-            print('Bye')
+    It is instantiated once per connection to the server, and must
+    override the handle() method to implement communication to the
+    client.
+    """
 
-            # lock released on exit
-            print_lock.release()
-            break
-
-        # send back reversed string to client
-        c.send(data)
-
-    # connection closed
-    c.close()
+    def handle(self):
+        # self.request is the TCP socket connected to the client
+        self.data = self.request.recv(1024).strip()
+        print("{} wrote:".format(self.client_address[0]))
+        print(self.data)
+        # just send back the same data, but upper-cased
+        self.request.sendall(self.data.upper())
 
 
-def Main():
-    host = ""
+if __name__ == "__main__":
+    HOST, PORT = "localhost", 65432
 
-    # reserve a port on your computer
-    # in our case it is 65432 but it
-    # can be anything
-    port = 65432
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((host, port))
-    print("socket binded to port", port)
+    # Create the server, binding to localhost on port 9999
+    server = socketserver.TCPServer((HOST, PORT), MyTCPHandler)
 
-    # put the socket into listening mode
-    s.listen(5)
-    print("socket is listening")
-
-    # a forever loop until client wants to exit
-    while True:
-        # establish connection with client
-        c, addr = s.accept()
-
-        # lock acquired by client
-        print_lock.acquire()
-        print('Connected to :', addr[0], ':', addr[1])
-
-        # Start a new thread and return its identifier
-        start_new_thread(threaded, (c,))
-    s.close()
-
-
-if __name__ == '__main__':
-    Main()
+    # Activate the server; this will keep running until you
+    # interrupt the program with Ctrl-C
+    server.serve_forever()
