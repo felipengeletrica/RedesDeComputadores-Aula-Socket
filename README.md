@@ -1,10 +1,10 @@
-<h2>Conexões de servidores TCP e UDP</h2>
+<h1>Conexões de servidores TCP e UDP</h1>
 
 -Abrimos o terminal no diretório do Servidor em python e rodamos os seguintes comandos:
 TCP ->
 	-python3 Server-TCP-Multicliente.py para conectar ao SV.
 	
-	<img src="https://github.com/felipengeletrica/RedesDeComputadores-Aula-Socket/blob/cado/img/tcp-Captura%20de%20tela%20de%202023-04-13%2018-36-11.png"
+	!(https://github.com/felipengeletrica/RedesDeComputadores-Aula-Socket/blob/cado/img/tcp-Captura%20de%20tela%20de%202023-04-13%2018-36-11.png)
 	
 	-python3 netcat -v 127.0.0.1 65432 para usar como cliente e enviar mensagens para o SV.
 	
