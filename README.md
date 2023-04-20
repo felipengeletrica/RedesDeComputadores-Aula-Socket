@@ -4,7 +4,7 @@
 TCP ->
 	-python3 Server-TCP-Multicliente.py para conectar ao SV.
 	
-	![](/img/tcp-Captura%20de%20tela%20de%202023-04-13%2018-36-11.png)
+	![](./img/tcp-Captura%20de%20tela%20de%202023-04-13%2018-36-11.png)
 	
 	-python3 netcat -v 127.0.0.1 65432 para usar como cliente e enviar mensagens para o SV.
 	
