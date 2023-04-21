@@ -1,44 +1,49 @@
-<h1>Conexões de servidores TCP e UDP</h1>
+<h1><center>Conexões de servidores TCP e UDP</center></h1>
 
--Abrimos o terminal no diretório do Servidor em python e rodamos os seguintes comandos:
+<h3><center>Abrimos o terminal no diretório do Servidor em python e rodamos os seguintes comandos:</center></h3>
+
 TCP ->
+
 	-python3 Server-TCP-Multicliente.py para conectar ao SV.
 	
-	![](./img/tcp-Captura%20de%20tela%20de%202023-04-13%2018-36-11.png)
-	
+![Abrindo conexão server multiclient-tcp](./img/tcp-openServidor.png)
+
 	-python3 netcat -v 127.0.0.1 65432 para usar como cliente e enviar mensagens para o SV.
-	
-	<img src="https://github.com/felipengeletrica/RedesDeComputadores-Aula-Socket/blob/cado/img/TCP-Captura%20de%20tela%20de%202023-04-13%2018-36-08.png"
+
+![Conectando o client no servidor](./img/TCP-conectionClient.png)
+
 
 UDP ->
+
 	-python3 Server-UDP-Simple.py para conectar ao SV.
-	
-	<img src="https://github.com/felipengeletrica/RedesDeComputadores-Aula-Socket/blob/cado/img/udp-Captura%20de%20tela%20de%202023-04-13%2018-31-18.png"
+
+![Abrindo conexão server multiclient-udp](./img/udp-openServidor.png)
 	
 	-python3 netcat -u 127.0.0.1 65431 para usar como cliente e enviar mensagens para o SV.
+
+![Conectando o client no servidor](./img/udp-conectionClient.png)	
 	
-	<img src="https://github.com/felipengeletrica/RedesDeComputadores-Aula-Socket/blob/cado/img/udp-Captura%20de%20tela%20de%202023-04-13%2018-30-32.png"
 	
--Utilizamos o comando nmap no terminal:
+<h3><center>Utilizamos o comando nmap no terminal:</center></h3>
 
 	-nmap -sU -p65431 localhost para identificar se a porta UDP estava aberta
  	-nmap -p65432 localhost para identificar se a porta TCP estava aberta
 	
-	<img src="https://github.com/felipengeletrica/RedesDeComputadores-Aula-Socket/blob/cado/img/NMAP-UDP-TCP-Captura%20de%20tela%20de%202023-04-13%2018-51-36.png"
+![Utilização de NMAP para identificar a porta aberta](./img/NMAP-UDP-TCP.png)
 
 <h2>Instruções para uso do Wireshark para filtrar dados provenientes de conexões UDP e TCP</h2>
 
--Abrimos terminal e rodamos o comando "sudo wireshark" para executar o programa para escutarmos as portas 65432/TCP e 65431/UDP com os filtros:
+<h3><center>Abrimos terminal e rodamos o comando "sudo wireshark" para executar o programa para escutarmos as portas 65432/TCP e 65431/UDP com os filtros:</center></h3>
 
 	-TCP.PORT==65432
 	
-	<img src="https://github.com/felipengeletrica/RedesDeComputadores-Aula-Socket/blob/cado/img/UDP-WIRESHARK-Captura%20de%20tela%20de%202023-04-13%2018-34-20.png"
+![Utilização do filtro para porta TCP](./img/TCP-WIRESHARK.png)
 	
 	-UDP.PORT==65431
 	
-	<img src="https://github.com/felipengeletrica/RedesDeComputadores-Aula-Socket/blob/cado/img/TCP-Captura%20de%20tela%20de%202023-04-13%2018-36-27.png"
+![Utilização do filtro para porta UDP](./img/UDP-WIRESHARK.png)
 
--Filtrando dados de conexões TCP
+<h3><center>Filtrando dados de conexões TCP</center></h3>
 
 	Abra o Wireshark e inicie a captura de tráfego na interface de rede desejada.
 	Digite "tcp" na barra de filtro e pressione Enter.
@@ -52,29 +57,28 @@ UDP ->
 	SYN-ACK: Estado "SYN_RCVD"
 	ACK: Estado "ESTABLISHED"
 
--Filtrando dados de conexões UDP
+<h3><center>Filtrando dados de conexões UDP</center></h3>
 
 	Abra o Wireshark e inicie a captura de tráfego na interface de rede desejada.
 	Digite "udp" na barra de filtro e pressione Enter.
 	Você verá agora apenas os pacotes UDP que foram capturados.
 	Ao contrário do TCP, o protocolo UDP é "connectionless", o que significa que não há conexão estabelecida antes de enviar dados. Cada pacote é enviado independentemente.
 
--Filtros de TCP e UDP
+<h3><center>Filtros TCP e UDP</center></h3>
 
 	Para filtrar apenas os pacotes de um endereço IP específico, use "ip.addr == [endereço IP]".
 	Para filtrar apenas os pacotes de uma porta TCP ou UDP específica, use "tcp.port == [número da porta]" ou "udp.port == [número da porta]", respectivamente.
 
--Usando o programa nmap para verificar a porta aberta
+<h3><center>Usando o programa nmap para verificar a porta aberta-Usando o programa nmap para verificar a porta aberta</center></h3>
 
-	Certifique-se de ter o nmap instalado em seu sistema operacional.
 	Abra o terminal e digite "nmap [endereço IP]" e pressione Enter.
 	Nmap irá mostrar as portas abertas no endereço IP fornecido.
 
--Camadas OSI usadas em TCP e UDP
+<h3><center>Camadas OSI usadas em TCP e UDP</center></h3>
 
 	TCP utiliza as camadas 4 (Transporte), 3 (Rede) e 2 (Enlace de dados) do modelo OSI.
 	UDP utiliza apenas as camadas 4 (Transporte) e 3 (Rede) do modelo OSI.
 
--Conclusão
+<h3><center>Conclusão</center></h3>
 
-	O Wireshark é uma ferramenta poderosa para a análise de tráfego de rede e pode ser útil em várias situações, como solucionar problemas de rede, monitorar a segurança de rede e muito mais. É importante ter conhecimento básico dos protocolos de rede TCP e UDP para entender melhor as informações exibidas pelo Wireshark. Com os filtros adequados, podemos filtrar os pacotes de rede que são relevantes para a análise. O programa nmap também é útil para verificar as portas abertas em um determinado endereço IP. Além disso, é importante entender as camadas do modelo OSI utilizadas pelos protocolos TCP e UDP para entender como eles são             implementados na rede.
+	O Wireshark é uma ferramenta poderosa para a análise de tráfego de rede e pode ser útil em várias situações, como solucionar problemas de rede, monitorar a segurança de rede e muito mais. É importante ter conhecimento básico dos protocolos de rede TCP e UDP para entender melhor as informações exibidas pelo Wireshark. Com os filtros adequados, podemos filtrar os pacotes de rede que são relevantes para a análise. O programa nmap também é útil para verificar as portas abertas em um determinado endereço IP. Além disso, é importante entender as camadas do modelo OSI utilizadas pelos protocolos TCP e UDP para entender como eles são implementados na rede.
