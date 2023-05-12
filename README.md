@@ -1,84 +1,144 @@
-<h1><center>Conexões de servidores TCP e UDP</center></h1>
+# Conexões de servidores TCP e UDP
 
-<h3><center>Abrimos o terminal no diretório do Servidor em python e rodamos os seguintes comandos:</center></h3>
+##  TCP :
 
-TCP ->
+### Conectando ao SERVIDOR Multiclient TCP abrindo o terminal no diretório onde está o arquivo e utilizamos o seguinte comando
 
-	-python3 Server-TCP-Multicliente.py para conectar ao SV.
+> `python3 Server-TCP-Multicliente.py`
+
+Exemplo mostrado na imagem abaixo:
 	
 ![Abrindo conexão server multiclient-tcp](./img/tcp-openServidor.png)
+***
 
-	-python3 netcat -v 127.0.0.1 65432 para usar como cliente e enviar mensagens para o SV.
+### Conectando ao Client TCP abrindo o terminal no diretório onde está o arquivo e utilizamos o seguinte comando
+
+>`python3 netcat -v 127.0.0.1 65432`
+
+Exemplo mostrado na imagem abaixo com inserção de mensagens que podem ser vistas na 1° imagem de conexão ao Servidor MultiClient TCP:
 
 ![Conectando o client no servidor](./img/TCP-conectionClient.png)
 
 
-UDP ->
+## UDP :
 
-	-python3 Server-UDP-Simple.py para conectar ao SV.
+### Conectando ao SERVIDOR Simple Client UDP abrindo o terminal no diretório onde está o arquivo e utilizamos o seguinte comando
+
+>`python3 Server-UDP-Simple.py`
+
+Exemplo mostrado na imagem abaixo:
 
 ![Abrindo conexão server multiclient-udp](./img/udp-openServidor.png)
 	
-	-python3 netcat -u 127.0.0.1 65431 para usar como cliente e enviar mensagens para o SV.
+### Conectando ao Client UDP abrindo o terminal no diretório onde está o arquivo e utilizamos o seguinte comando
+
+>`python3 netcat -u 127.0.0.1 65431`
+
+Exemplo mostrado na imagem abaixo com envio de mensagens que podem ser vistas na imagem do Servidor UDP
 
 ![Conectando o client no servidor](./img/udp-conectionClient.png)	
-	
-	
-<h3><center>Utilizamos o comando nmap no terminal:</center></h3>
 
-	-nmap -sU -p65431 localhost para identificar se a porta UDP estava aberta
- 	-nmap -p65432 localhost para identificar se a porta TCP estava aberta
+***
 	
+## NMAP :
+
+### Para identificar se a porta UDP estava aberta utilizamos o seguinte comando:
+
+>`nmap -sU -p65431 localhost `
+
+### Para identificar se a porta TCP estava aberta utilizamos o seguinte comando:
+
+>`nmap -p65432 localhost`
+	
+### Exemplos mostrados na imagem abaixo:
+
 ![Utilização de NMAP para identificar a porta aberta](./img/NMAP-UDP-TCP.png)
 
-<h2>Instruções para uso do Wireshark para filtrar dados provenientes de conexões UDP e TCP</h2>
+Na imagem acima também podemos observar o uso do comando:
+<br>
 
-<h3><center>Abrimos terminal e rodamos o comando "sudo wireshark" para executar o programa para escutarmos as portas 65432/TCP e 65431/UDP com os filtros:</center></h3>
+>`netstat -an | grep "65431"`
 
-	-TCP.PORT==65432
-	
+Usado para exibir informações de conexões de rede ativas no sistema e filtrar as conexões que estão sendo executadas na porta 65431.
+
+<br>
+
+
+*** 
+
+## Instruções para uso do Wireshark para filtrar dados provenientes de conexões UDP e TCP
+<br>
+
+### Abrimos terminal e rodamos o seguinte comando para executar o programa:
+>`sudo wireshark`
+<br>
+
+Com o programa aberto precisamos colocar um filtro para que ele capture o tráfego na interface de rede desejada.
+
+Para filtrar apenas os pacotes de uma porta TCP ou UDP específica, use "TCP.port == [número da porta]" ou "UDP.port == [número da porta]", respectivamente.
+
+<br>
+
+Neste exemplo usaremos um filtro para TCP:
+<br>
+
+	TCP.PORT==65432
+
+Na imagem abaixo podemos observar o filtro citado acima na área verde  e abaixo as capturas do tráfego pelo filtro:
 ![Utilização do filtro para porta TCP](./img/TCP-WIRESHARK.png)
-	
-	-UDP.PORT==65431
-	
+
+Nesta imagem acima, podemos ver a conexão de 3 vias funcionando. <br>
+- A primeira Via seria o `[SYN]`  que está na primeira linha do nosso tráfego.<br>
+	O pacote `SYN` é enviado pelo cliente para iniciar a conexão.
+- A segunda Via seria a `[SYN-ACK]` que está na segunda linha do nosso tráfego.<br>
+	O pacote `SYN-ACK` é enviado pelo servidor em resposta ao SYN para confirmar que está aberto para a conexão.
+- A terceira Via seria `[ACK]` que está na terceira linha do nosso tráfego.<br>
+	O pacote `ACK` é enviado pelo cliente em resposta ao SYN-ACK para confirmar que a conexão está estabelecida. <br>
+
+O estado de cada uma dessas etapas é:
+- SYN: Estado "SYN_SENT"
+- SYN-ACK: Estado "SYN_RCVD"
+- ACK: Estado "ESTABLISHED"
+
+Fora os estados citados acima, podemos citar ainda mais 2 estados que aparecem no tráfego:
+- PSH:  é usado para indicar que os dados no pacote devem ser entregues imediatamente ao aplicativo de destino, sem aguardar a formação de um pacote maior. Isso é útil para transferir dados em tempo real ou em situações em que a latência é importante.
+- FIN: é usado para indicar que o remetente não tem mais dados para enviar. Ao enviar um pacote com o flag FIN definido, o remetente está solicitando o encerramento da conexão.
+
+Dito isso, o pacote `[PSH-ACK]` é usado para enviar dados de forma rápida e confiável pela rede, garantindo que eles sejam entregues corretamente e sem atrasos desnecessários. Enquanto que o pacote `[FIN-ACK]` é usado para encerrar uma conexão TCP de forma ordenada e confiável. Quando um dispositivo recebe um pacote com o flag FIN, ele sabe que o remetente não tem mais dados para enviar e pode responder com um pacote com o flag ACK para confirmar o encerramento da conexão. Depois que ambos os dispositivos enviaram pacotes com o flag FIN e ACK, a conexão é encerrada de forma ordenada e alocando adequadamente os recursos de rede.
+
+***
+
+<br>
+
+Neste exemplo usaremos um filtro para UDP:
+<br>
+
+ 	UDP.PORT==65431
+Na imagem abaixo podemos observar o filtro citado acima na área verde  e abaixo as capturas do tráfego pelo filtro:
 ![Utilização do filtro para porta UDP](./img/UDP-WIRESHARK.png)
 
-<h3><center>Filtrando dados de conexões TCP</center></h3>
+Ao contrário do TCP, o protocolo UDP é "connectionless", o que significa que não há conexão estabelecida antes de enviar dados. Cada pacote é enviado independentemente.
 
-	Abra o Wireshark e inicie a captura de tráfego na interface de rede desejada.
-	Digite "tcp" na barra de filtro e pressione Enter.
-	Você verá agora apenas os pacotes TCP que foram capturados.
-	Identifique a conexão de 3 vias (three-way) olhando os pacotes de SYN, SYN-ACK e ACK.
-	O pacote SYN é enviado pelo cliente para iniciar a conexão.
-	O pacote SYN-ACK é enviado pelo servidor em resposta ao SYN para confirmar que está aberto para a conexão.
-	O pacote ACK é enviado pelo cliente em resposta ao SYN-ACK para confirmar que a conexão está estabelecida.
-	O estado de cada uma dessas etapas é:
-	SYN: Estado "SYN_SENT"
-	SYN-ACK: Estado "SYN_RCVD"
-	ACK: Estado "ESTABLISHED"
+<br>
 
-<h3><center>Filtrando dados de conexões UDP</center></h3>
+***
+<br>
 
-	Abra o Wireshark e inicie a captura de tráfego na interface de rede desejada.
-	Digite "udp" na barra de filtro e pressione Enter.
-	Você verá agora apenas os pacotes UDP que foram capturados.
-	Ao contrário do TCP, o protocolo UDP é "connectionless", o que significa que não há conexão estabelecida antes de enviar dados. Cada pacote é enviado independentemente.
+## Camadas OSI usadas em TCP e UDP
+<br>
 
-<h3><center>Filtros TCP e UDP</center></h3>
 
-	Para filtrar apenas os pacotes de um endereço IP específico, use "ip.addr == [endereço IP]".
-	Para filtrar apenas os pacotes de uma porta TCP ou UDP específica, use "tcp.port == [número da porta]" ou "udp.port == [número da porta]", respectivamente.
+-	O TCP se comunica diretamente com a camada de aplicação (camada 7) por meio de soquetes, que são interfaces de programação de aplicativos (APIs) usadas para estabelecer conexões de rede entre aplicativos em diferentes dispositivos. Além disso, o TCP também usa serviços fornecidos pela camada de rede (camada 3) e pela camada de enlace de dados (camada 2) para enviar e receber pacotes de dados pela rede.
+- O UDP se comunica diretamente com a camada de aplicação (camada 7) por meio de soquetes, assim como o TCP. No entanto, ao contrário do TCP, o UDP não fornece confiabilidade de comunicação e controle de fluxo. Em vez disso, o UDP é um protocolo simples e sem conexão que envia datagramas de forma independente pela rede.
+O UDP também usa serviços fornecidos pela camada de rede (camada 3) e pela camada de enlace de dados (camada 2) para enviar e receber pacotes de dados pela rede.
 
-<h3><center>Usando o programa nmap para verificar a porta aberta-Usando o programa nmap para verificar a porta aberta</center></h3>
+<br>
 
-	Abra o terminal e digite "nmap [endereço IP]" e pressione Enter.
-	Nmap irá mostrar as portas abertas no endereço IP fornecido.
+***
+<br>
 
-<h3><center>Camadas OSI usadas em TCP e UDP</center></h3>
+## Conclusão
+<br>
+Em geral, tanto o Wireshark quanto o NMAP são ferramentas valiosas para profissionais de TI que precisam monitorar e analisar o tráfego de rede. O Wireshark é essencial para solucionar problemas e identificar gargalos de desempenho, oferecendo recursos avançados de filtragem, análise de fluxo de dados e estatísticas de rede. Já o NMAP é uma ferramenta poderosa para monitorar a atividade da rede, avaliar a segurança do sistema e detectar vulnerabilidades, com suporte para protocolos TCP e UDP e recursos avançados de varredura de portas.
 
-	TCP utiliza as camadas 4 (Transporte), 3 (Rede) e 2 (Enlace de dados) do modelo OSI.
-	UDP utiliza apenas as camadas 4 (Transporte) e 3 (Rede) do modelo OSI.
-
-<h3><center>Conclusão</center></h3>
-
-	O Wireshark é uma ferramenta poderosa para a análise de tráfego de rede e pode ser útil em várias situações, como solucionar problemas de rede, monitorar a segurança de rede e muito mais. É importante ter conhecimento básico dos protocolos de rede TCP e UDP para entender melhor as informações exibidas pelo Wireshark. Com os filtros adequados, podemos filtrar os pacotes de rede que são relevantes para a análise. O programa nmap também é útil para verificar as portas abertas em um determinado endereço IP. Além disso, é importante entender as camadas do modelo OSI utilizadas pelos protocolos TCP e UDP para entender como eles são implementados na rede.
+Ambas as ferramentas podem ser usadas em conjunto para fornecer uma visão abrangente da atividade da rede, permitindo que os usuários identifiquem problemas de desempenho, detectem atividades maliciosas e implementem medidas de segurança. Em resumo, o Wireshark e o NMAP são ferramentas essenciais para profissionais de TI que desejam garantir a eficiência e a segurança de suas redes.
